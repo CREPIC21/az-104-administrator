@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "danman09531736",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-09-01",
+            "location": "North Europe",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "accessTier": "Cool",
+                "allowBlobPublicAccess": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Deny",
+                    "ipRules": [
+                        {
+                            "action": "Allow",
+                            "value": "91.232.46.35"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "[concat('danman09531736', '/default')]",
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2023-01-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', 'danman09531736')]"
+            ],
+            "properties": {
+                "isVersioningEnabled": true
+            }
+        }
+    ],
+    "outputs": {}
+}
