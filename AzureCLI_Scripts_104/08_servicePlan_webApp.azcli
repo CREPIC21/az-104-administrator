@@ -1,0 +1,3 @@
+az appservice plan create -n "danplan83748" -g "app-grp" --sku F1
+
+az webapp create -n "danapp75822" -g "app-grp" --plan "danplan83748"

@@ -85,7 +85,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2019-11-0
 // We created a keyvault manually in Azure UI, we are refferencig to it here
 resource bicepvault635129 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
   name: 'bicepvault635129'
-  scope: resourceGroup('b454ea40-6d37-4942-926a-a63094de3c14', 'bicep')
+  scope: resourceGroup('<subscription_id>', 'bicep')
 }
 
 // we are executing 12_vm.bicep and assigning adminpassword to VM from keyvault secret
