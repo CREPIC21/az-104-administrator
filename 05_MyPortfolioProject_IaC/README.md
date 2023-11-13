@@ -1,8 +1,8 @@
-# Terraform IaC for ASP.NET Web Application Deployment
+# Terraform IaC on Azure for ASP.NET Web Application Deployment
 
 ### Project Goals
 The primary goals of this project are:
-- automate the provisioning of infrastructure using Terraform modules
+- automate the provisioning of infrastructure using Terraform modules on Azure
 - deploy an ASP.NET web application to the Web VM
 - establish secure communication between the Web VM and DB VM via a private IP address
 - utilize Azure Storage Account for storing scripts and images
