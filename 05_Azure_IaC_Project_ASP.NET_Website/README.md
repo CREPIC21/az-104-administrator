@@ -47,6 +47,13 @@ The Web VM communicates with the DB VM using a private IP address within the sam
 ## Getting Started
 To get started with this project, follow these steps:
 - clone this repository to your local machine
+```shell
+git clone https://github.com/CREPIC21/az-administrator-architect.git
+```
+- change into the project directory:
+```shell
+cd az-administrator-architect/05_Azure_IaC_Project_ASP.NET_Website/MyPortfolioAppTerraformIaC
+```
 - set up your Azure credentials and Terraform environment
 - customize the Terraform variables and configurations to match your requirements, specifically below variables:
   - `DB_VM_ADMIN_USERNAME`

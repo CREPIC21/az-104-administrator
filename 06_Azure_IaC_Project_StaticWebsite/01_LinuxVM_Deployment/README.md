@@ -15,11 +15,11 @@ Project streamlines the creation of the following Azure resources:
 ### Getting Started
 1. Clone this repository to your local machine:
 ```shell
-git clone https://github.com/CREPIC21/MyWebsite
+git clone https://github.com/CREPIC21/az-administrator-architect.git
 ```
 2. Change into the project directory:
 ```shell
-cd MyWebsite/azure_terraform/01_LinuxVM_Deployment/
+cd az-administrator-architect/06_Azure_IaC_Project_StaticWebsite/01_LinuxVM_Deployment
 ```
 3. Initialize your Terraform workspace:
 ```shell
