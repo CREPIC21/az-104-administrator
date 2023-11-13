@@ -1,32 +1,61 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    // Specify the content version of the template
     "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
     "parameters": {},
+
+    // Define user-defined functions for the template (none in this case)
     "functions": [],
+
+    // Define variables for the template, including the resource location
     "variables": {
         "resourceLocation": "North Europe"
     },
+
+    // Define Azure resources to be deployed by the template
     "resources": [
         {
+            // Define the name for the virtual network
             "name": "appnetwork",
+
+            // Specify the type of Azure resource (Virtual Network)
             "type": "Microsoft.Network/virtualNetworks",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2021-08-01",
+
+            // Specify the geographic location for the virtual network using the variable
             "location": "[variables('resourceLocation')]",
+
+            // Define the properties for the virtual network, including address space and subnets
             "properties": {
+                // Specify the address space for the virtual network
                 "addressSpace": {
                     "addressPrefixes": [
                         "10.0.0.0/16"
                     ]
                 },
+
+                // Specify the subnets for the virtual network
                 "subnets": [
                     {
+                        // Define the name for the first subnet
                         "name": "SubnetA",
+
+                        // Specify the properties for the first subnet, including the address prefix
                         "properties": {
                             "addressPrefix": "10.0.0.0/24"
                         }
                     },
                     {
+                        // Define the name for the second subnet
                         "name": "SubnetB",
+
+                        // Specify the properties for the second subnet, including the address prefix
                         "properties": {
                             "addressPrefix": "10.0.1.0/24"
                         }
@@ -35,35 +64,68 @@
             }
         },
         {
+            // Define the name for the public IP address
             "name": "ip-01",
+
+            // Specify the type of Azure resource (Public IP Address)
             "type": "Microsoft.Network/publicIPAddresses",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2023-04-01",
+
+            // Specify the geographic location for the public IP address, using the location of the resource group
             "location": "[resourceGroup().location]",
+
+            // Specify the SKU (Basic) for the public IP address
             "sku": {
                 "name": "Basic"
             },
+
+            // Define the properties for the public IP address
             "properties": {
+                // Specify the public IP allocation method (Dynamic)
                 "publicIPAllocationMethod": "Dynamic"
             }
         },
         {
+            // Define the name for the network interface
             "name": "nic-01",
+
+            // Specify the type of Azure resource (Network Interface)
             "type": "Microsoft.Network/networkInterfaces",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2023-04-01",
+
+            // Specify the geographic location for the network interface, using the location of the resource group
             "location": "[resourceGroup().location]",
+
+            // Specify dependencies for the network interface on the virtual network and public IP address
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', 'appnetwork')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'ip-01')]"
             ],
+
+            // Define the properties for the network interface, including IP configurations
             "properties": {
+                // Specify the IP configurations for the network interface
                 "ipConfigurations": [
                     {
+                        // Define the name for the first IP configuration
                         "name": "ipConfig1",
+
+                        // Specify the properties for the IP configuration, including allocation method,
+                        // subnet, and public IP address
                         "properties": {
+                            // Specify the private IP allocation method (Dynamic)
                             "privateIPAllocationMethod": "Dynamic",
+
+                            // Specify the subnet for the IP configuration using its resource ID
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'appnetwork', 'SubnetA')]"
                             },
+
+                            // Specify the public IP address for the IP configuration using its resource ID
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ip-01')]"
                             }
@@ -73,5 +135,7 @@
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }

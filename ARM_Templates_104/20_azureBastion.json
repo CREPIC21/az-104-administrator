@@ -1,28 +1,41 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    // Specify the content version of the template
     "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
     "parameters": {},
+
+    // Define functions used in the template (none in this case)
     "functions": [],
+
+    // Define variables used in the template (none in this case)
     "variables": {},
+
+    // Define resources to be deployed
     "resources": [
+        // Resource: Virtual Network
         {
             "name": "appnetwork",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2021-08-01",
             "location": "North Europe",
             "properties": {
+                // Specify properties for the virtual network
                 "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/16"
-                    ]
+                    "addressPrefixes": [ "10.0.0.0/16" ]
                 },
                 "subnets": [
+                    // Specify properties for SubnetA
                     {
                         "name": "SubnetA",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24"
                         }
                     },
+                    // Specify properties for Azure Bastion Subnet
                     {
                         "name": "AzureBastionSubnet",
                         "properties": {
@@ -32,29 +45,34 @@
                 ]
             }
         },
+        // Resource: Public IP Address for Bastion Host
         {
             "name": "bastion-ip",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
             "location": "North Europe",
             "sku": {
+                // Specify the SKU for the public IP address
                 "name": "Standard"
             },
             "properties": {
+                // Specify properties for the public IP address
                 "publicIPAllocationMethod": "Static"
             }
         },
+        // Resource: Azure Bastion Host
         {
             "type": "Microsoft.Network/bastionHosts",
             "apiVersion": "2023-04-01",
             "name": "app-bastion",
             "location": "North Europe",
             "dependsOn": [
+                // Specify dependencies on other resources (Public IP Address, Virtual Network)
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'bastion-ip')]",
-                "[resourceId('Microsoft.Network/virtualNetworks', 'appnetwork' )]"
-
+                "[resourceId('Microsoft.Network/virtualNetworks', 'appnetwork')]"
             ],
             "properties": {
+                // Specify properties for the Azure Bastion Host
                 "ipConfigurations": [
                     {
                         "name": "bastion-config",
@@ -71,5 +89,7 @@
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }

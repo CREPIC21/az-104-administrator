@@ -1,7 +1,13 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    // Specify the content version of the template
     "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template
     "parameters": {
+        // Define a string parameter for the virtual machine password
         "vmpassword": {
             "type": "string",
             "metadata": {
@@ -9,19 +15,23 @@
             }
         }
     },
+
+    // Define functions and variables used in the template (none in this case)
     "functions": [],
     "variables": {},
+
+    // Define the resources to be deployed
     "resources": [
         {
+            // Define a virtual network resource
             "name": "appnetwork",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2021-08-01",
             "location": "[resourceGroup().location]",
             "properties": {
+                // Specify the address space and subnets for the virtual network
                 "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/16"
-                    ]
+                    "addressPrefixes": [ "10.0.0.0/16" ]
                 },
                 "subnets": [
                     {
@@ -40,6 +50,7 @@
             }
         },
         {
+            // Define a public IP address resource
             "name": "ip-01",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
@@ -48,10 +59,49 @@
                 "name": "Basic"
             },
             "properties": {
+                // Specify dynamic public IP allocation
                 "publicIPAllocationMethod": "Dynamic"
             }
         },
         {
+            // Define a network security group resource
+            "name": "nsg-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                // Define a security rule allowing RDP traffic
+                "securityRules": [
+                    {
+                        "name": "Allow-RDP",
+                        "properties": {
+                            "description": "Allow RDP",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            // Define a storage account resource
+            "name": "danman67381",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-09-01",
+            "location": "[resourceGroup().location]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS"
+            }
+        },
+        {
+            // Define a network interface resource
             "name": "nic-01",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-04-01",
@@ -62,6 +112,7 @@
                 "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-01')]"
             ],
             "properties": {
+                // Specify IP configurations, subnet, and associated resources
                 "ipConfigurations": [
                     {
                         "name": "ipConfig1",
@@ -82,40 +133,7 @@
             }
         },
         {
-            "name": "danman67381",
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-09-01",
-            "location": "[resourceGroup().location]",
-            "kind": "StorageV2",
-            "sku": {
-                "name": "Standard_LRS"
-            }
-        },
-        {
-            "name": "nsg-01",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2023-04-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "Allow-RDP",
-                        "properties": {
-                            "description": "Allow RDP",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "3389",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 100,
-                            "direction": "Inbound"
-                        }
-                    }
-                ]
-            }
-        },
-        {
+            // Define a virtual machine resource
             "name": "vm-01",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
@@ -125,6 +143,7 @@
                 "[resourceId('Microsoft.Network/networkInterfaces', 'nic-01')]"
             ],
             "properties": {
+                // Specify VM properties, OS profile, storage profile, and network profile
                 "hardwareProfile": {
                     "vmSize": "Standard_D2s_v3"
                 },
@@ -162,5 +181,7 @@
             }
         }
     ],
+
+    // Define template outputs (none in this case)
     "outputs": {}
 }

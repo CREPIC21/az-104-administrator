@@ -1,0 +1,20 @@
+{
+    // Specify the Azure Resource Manager schema for the parameters file
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    // Specify the content version of the parameters file
+    "contentVersion": "1.0.0.0",
+    // Define parameters for the template
+    "parameters": {
+        // Define a parameter for the virtual machine password
+        "vmpassword": {
+            "reference": {
+                // Reference a key vault for secure password storage -> ENTER SUBSCRIPTION ID IN THE NESSESARY FIELD
+                "keyVault": {
+                    "id": "/subscriptions/<subscription_id>/resourceGroups/app-grp/providers/Microsoft.KeyVault/vaults/danman6736732"
+                },
+                // Specify the secret name in the key vault
+                "secretName": "vmpass"
+            }
+        }
+    }
+}

@@ -6,19 +6,37 @@
     "variables": {},
     "resources": [
         {
+            // Define the name for the network interface
             "name": "nic-01",
+
+            // Specify the type of Azure resource (Network Interface)
             "type": "Microsoft.Network/networkInterfaces",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2023-04-01",
+
+            // Specify the geographic location for the network interface
             "location": "North Europe",
+
+            // Define the properties for the network interface, including IP configurations
             "properties": {
+                // Specify the IP configurations for the network interface
                 "ipConfigurations": [
                     {
+                        // Define the name for the first IP configuration
                         "name": "ipConfig1",
+
+                        // Specify the properties for the IP configuration, including allocation method
                         "properties": {
+                            // Specify the private IP allocation method (Dynamic)
                             "privateIPAllocationMethod": "Dynamic",
+
+                            // Specify the subnet for the IP configuration using its resource ID
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'appnetwork', 'SubnetA')]"
                             },
+
+                            // Specify the public IP address for the IP configuration using its resource ID
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ip-01')]"
                             }

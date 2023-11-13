@@ -1,10 +1,22 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    // Specify the content version of the template
     "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
     "parameters": {},
+
+    // Define functions used in the template (none in this case)
     "functions": [],
+
+    // Define variables used in the template (none in this case)
     "variables": {},
+
+    // Define resources to be deployed
     "resources": [
+        // Resource: Storage Account
         {
             "name": "danman09531736",
             "type": "Microsoft.Storage/storageAccounts",
@@ -15,12 +27,14 @@
                 "name": "Standard_LRS"
             },
             "properties": {
+                // Specify properties for the storage account
                 "accessTier": "Cool",
                 "allowBlobPublicAccess": true,
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "defaultAction": "Deny",
                     "ipRules": [
+                        // Specify IP rule to allow traffic from a specific IP address -> my IP address in this case
                         {
                             "action": "Allow",
                             "value": "91.232.46.35"
@@ -29,17 +43,22 @@
                 }
             }
         },
+        // Resource: Blob Service within the Storage Account
         {
             "name": "[concat('danman09531736', '/default')]",
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2023-01-01",
             "dependsOn": [
+                // Specify dependencies on other resources (Storage Account)
                 "[resourceId('Microsoft.Storage/storageAccounts', 'danman09531736')]"
             ],
             "properties": {
+                // Specify properties for the blob service
                 "isVersioningEnabled": true
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }

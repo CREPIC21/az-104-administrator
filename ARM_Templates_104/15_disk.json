@@ -1,25 +1,42 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    // Specify the content version of the template
     "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
     "parameters": {},
+
+    // Define functions used in the template (none in this case)
     "functions": [],
+
+    // Define variables used in the template (none in this case)
     "variables": {},
+
+    // Define resources to be deployed
     "resources": [
+        // Resource: Managed Disk
         {
             "type": "Microsoft.Compute/disks",
             "apiVersion": "2023-01-02",
             "name": "data-disk",
             "location": "[resourceGroup().location]",
             "sku": {
+                // Specify the storage account type for the disk
                 "name": "Standard_LRS"
             },
             "properties": {
+                // Specify the creation data for the disk (create an empty disk)
                 "creationData": {
                     "createOption": "Empty"
                 },
+                // Specify the size of the disk in gigabytes
                 "diskSizeGB": 16
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }

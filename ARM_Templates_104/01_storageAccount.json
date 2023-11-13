@@ -6,11 +6,22 @@
     "variables": {},
     "resources": [
         {
+            // Define the name for the storage account
             "name": "danman748307",
+
+            // Specify the type of Azure resource (Storage Account)
             "type": "Microsoft.Storage/storageAccounts",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2022-09-01",
+
+            // Specify the geographic location for the storage account
             "location": "North Europe",
+
+            // Specify the kind of storage account (StorageV2)
             "kind": "StorageV2",
+
+            // Specify the SKU (Standard_LRS) for the storage account
             "sku": {
                 "name": "Standard_LRS"
             }

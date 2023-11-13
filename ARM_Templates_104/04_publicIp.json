@@ -6,14 +6,26 @@
     "variables": {},
     "resources": [
         {
+            // Define the name for the public IP address
             "name": "ip-01",
+
+            // Specify the type of Azure resource (Public IP Address)
             "type": "Microsoft.Network/publicIPAddresses",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2023-04-01",
+
+            // Specify the geographic location for the public IP address
             "location": "North Europe",
+
+            // Specify the SKU (Basic) for the public IP address
             "sku": {
                 "name": "Basic"
             },
+
+            // Define the properties for the public IP address
             "properties": {
+                // Specify the public IP allocation method (Dynamic)
                 "publicIPAllocationMethod": "Dynamic"
             }
         }

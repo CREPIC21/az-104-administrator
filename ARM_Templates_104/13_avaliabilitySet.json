@@ -1,10 +1,22 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+    // Specify the content version of the template
     "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
     "parameters": {},
+
+    // Define functions used in the template (none in this case)
     "functions": [],
+
+    // Define variables used in the template (none in this case)
     "variables": {},
+
+    // Define resources to be deployed
     "resources": [
+        // Resource 1: Availability Set
         {
             "name": "set-01",
             "type": "Microsoft.Compute/availabilitySets",
@@ -14,10 +26,14 @@
                 "name": "Aligned"
             },
             "properties": {
+                // Specify the number of fault domains for the availability set
                 "platformFaultDomainCount": 3,
+                // Specify the number of update domains for the availability set
                 "platformUpdateDomainCount": 5
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }

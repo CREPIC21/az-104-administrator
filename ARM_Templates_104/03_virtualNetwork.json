@@ -6,25 +6,43 @@
     "variables": {},
     "resources": [
         {
+            // Define the name for the virtual network
             "name": "appnetwork",
+
+            // Specify the type of Azure resource (Virtual Network)
             "type": "Microsoft.Network/virtualNetworks",
+
+            // Specify the API version to use for deployment
             "apiVersion": "2021-08-01",
+
+            // Specify the geographic location for the virtual network
             "location": "North Europe",
+
+            // Define the properties of the virtual network
             "properties": {
+                // Specify the address space for the virtual network
                 "addressSpace": {
                     "addressPrefixes": [
                         "10.0.0.0/16"
                     ]
                 },
+
+                // Define the subnets within the virtual network
                 "subnets": [
                     {
+                        // Define the name for SubnetA
                         "name": "SubnetA",
+
+                        // Specify the properties for SubnetA, including its address prefix
                         "properties": {
                             "addressPrefix": "10.0.0.0/24"
                         }
                     },
                     {
+                        // Define the name for SubnetB
                         "name": "SubnetB",
+
+                        // Specify the properties for SubnetB, including its address prefix
                         "properties": {
                             "addressPrefix": "10.0.1.0/24"
                         }

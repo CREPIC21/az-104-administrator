@@ -1,0 +1,13 @@
+{
+    // Specify the Azure Resource Manager schema for the template parameters
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    // Specify the content version of the template parameters
+    "contentVersion": "1.0.0.0",
+    // Define values for the parameters used in the corresponding template
+    "parameters": {
+        // Define the value for the "resourceLocation" parameter
+        "resourceLocation": {
+            "value": "UK South"
+        }
+    }
+}

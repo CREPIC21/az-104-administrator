@@ -1,18 +1,29 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
 
-    },
+    // Specify the content version of the template
+    "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
+    "parameters": {},
+
+    // Define functions used in the template (none in this case)
     "functions": [],
+
+    // Define variables used in the template (none in this case)
     "variables": {},
+
+    // Define resources to be deployed
     "resources": [
+        // Resource: Virtual Network
         {
             "name": "appnetwork",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2021-08-01",
             "location": "[resourceGroup().location]",
             "properties": {
+                // Specify the address space and subnets for the virtual network
                 "addressSpace": {
                     "addressPrefixes": [
                         "10.0.0.0/16"
@@ -34,29 +45,35 @@
                 ]
             }
         },
+        // Resource: Public IP Address
         {
             "name": "ip-01",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
+                // Specify the SKU for the public IP address
                 "name": "Basic"
             },
             "properties": {
+                // Specify the public IP allocation method
                 "publicIPAllocationMethod": "Dynamic"
             }
         },
+        // Resource: Network Interface
         {
             "name": "nic-01",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                // Specify dependencies on other resources
                 "[resourceId('Microsoft.Network/virtualNetworks', 'appnetwork')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'ip-01')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-01')]"
             ],
             "properties": {
+                // Specify IP configurations and network security group
                 "ipConfigurations": [
                     {
                         "name": "ipConfig1",
@@ -76,6 +93,7 @@
                 }
             }
         },
+        // Resource: Storage Account
         {
             "name": "danman67381",
             "type": "Microsoft.Storage/storageAccounts",
@@ -83,15 +101,18 @@
             "location": "[resourceGroup().location]",
             "kind": "StorageV2",
             "sku": {
+                // Specify the SKU for the storage account
                 "name": "Standard_LRS"
             }
         },
+        // Resource: Network Security Group
         {
             "name": "nsg-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "properties": {
+                // Specify security rules for the network security group
                 "securityRules": [
                     {
                         "name": "Allow-RDP",
@@ -110,16 +131,19 @@
                 ]
             }
         },
+        // Resource: Virtual Machine
         {
             "name": "vm-01",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                // Specify dependencies on other resources
                 "[resourceId('Microsoft.Storage/storageAccounts', toLower('danman67381'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', 'nic-01')]"
             ],
             "properties": {
+                // Specify hardware profile, OS profile, storage profile, network profile, and diagnostics profile
                 "hardwareProfile": {
                     "vmSize": "Standard_D2s_v3"
                 },
@@ -140,6 +164,7 @@
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
                     },
+                    // Specify data disks for the virtual machine
                     "dataDisks": [
                         {
                             "name": "data-disk1",
@@ -167,9 +192,15 @@
                         "enabled": true,
                         "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('danman67381'))).primaryEndpoints.blob]"
                     }
+                },
+                // Specify the availability set for the virtual machine
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'set-01')]"
                 }
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }

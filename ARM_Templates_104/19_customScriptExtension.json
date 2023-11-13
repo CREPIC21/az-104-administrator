@@ -1,30 +1,41 @@
 {
+    // Specify the Azure Resource Manager schema for the template
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
 
-    },
+    // Specify the content version of the template
+    "contentVersion": "1.0.0.0",
+
+    // Define parameters for the template (none in this case)
+    "parameters": {},
+
+    // Define functions used in the template (none in this case)
     "functions": [],
+
+    // Define variables used in the template (none in this case)
     "variables": {},
+
+    // Define resources to be deployed
     "resources": [
+        // Resource: Virtual Network
         {
             "name": "appnetwork",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2021-08-01",
             "location": "[resourceGroup().location]",
             "properties": {
+                // Specify properties for the virtual network
                 "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/16"
-                    ]
+                    "addressPrefixes": [ "10.0.0.0/16" ]
                 },
                 "subnets": [
+                    // Specify properties for SubnetA
                     {
                         "name": "SubnetA",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24"
                         }
                     },
+                    // Specify properties for SubnetB
                     {
                         "name": "SubnetB",
                         "properties": {
@@ -34,29 +45,35 @@
                 ]
             }
         },
+        // Resource: Public IP Address
         {
             "name": "ip-01",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
+                // Specify the SKU for the public IP address
                 "name": "Basic"
             },
             "properties": {
+                // Specify properties for the public IP address
                 "publicIPAllocationMethod": "Dynamic"
             }
         },
+        // Resource: Network Interface
         {
             "name": "nic-01",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                // Specify dependencies on other resources (Virtual Network, Public IP, Network Security Group)
                 "[resourceId('Microsoft.Network/virtualNetworks', 'appnetwork')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'ip-01')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-01')]"
             ],
             "properties": {
+                // Specify properties for the network interface
                 "ipConfigurations": [
                     {
                         "name": "ipConfig1",
@@ -76,6 +93,7 @@
                 }
             }
         },
+        // Resource: Storage Account
         {
             "name": "danman67381",
             "type": "Microsoft.Storage/storageAccounts",
@@ -83,15 +101,18 @@
             "location": "[resourceGroup().location]",
             "kind": "StorageV2",
             "sku": {
+                // Specify the SKU for the storage account
                 "name": "Standard_LRS"
             }
         },
+        // Resource: Network Security Group
         {
             "name": "nsg-01",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "properties": {
+                // Specify security rules for the network security group
                 "securityRules": [
                     {
                         "name": "Allow-RDP",
@@ -124,39 +145,47 @@
                 ]
             }
         },
+        // Resource: Virtual Machine Extension (CustomScriptExtension)
         {
             "name": "[concat('vm-01', '/config-app')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2023-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                // Specify dependencies on other resources (Virtual Machine)
                 "[resourceId('Microsoft.Compute/virtualMachines', 'vm-01')]"
             ],
             "properties": {
+                // Specify properties for the virtual machine extension
                 "publisher": "Microsoft.Compute",
                 "type": "CustomScriptExtension",
                 "typeHandlerVersion": "1.10",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
+                        // Specify the URI of the script file
                         "https://dan7402094383.blob.core.windows.net/scripts/IISS_Config.ps1?sp=r&st=2023-10-27T11:53:21Z&se=2023-10-27T19:53:21Z&spr=https&sv=2022-11-02&sr=b&sig=H%2BCpDc2s2cCnGE9AiHCVh7zXb8rrslu749VIhs0G5mg%3D"
                     ]
                 },
                 "protectedSettings": {
+                    // Specify the command to execute in the script
                     "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File IISS_Config.ps1"
                 }
             }
         },
+        // Resource: Virtual Machine
         {
             "name": "vm-01",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                // Specify dependencies on other resources (Storage Account, Network Interface)
                 "[resourceId('Microsoft.Storage/storageAccounts', toLower('danman67381'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', 'nic-01')]"
             ],
             "properties": {
+                // Specify properties for the virtual machine
                 "hardwareProfile": {
                     "vmSize": "Standard_D2s_v3"
                 },
@@ -188,6 +217,7 @@
                 },
                 "networkProfile": {
                     "networkInterfaces": [
+                        // Specify the ID of the network interface
                         {
                             "id": "[resourceId('Microsoft.Network/networkInterfaces', 'nic-01')]"
                         }
@@ -202,5 +232,7 @@
             }
         }
     ],
+
+    // Define outputs for the template (none in this case)
     "outputs": {}
 }
