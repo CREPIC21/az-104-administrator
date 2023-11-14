@@ -10,6 +10,7 @@ Azure infrastructure in this project has been provisioned using Bicep, a domain-
 - use provided Bicep file to deploy Windows Server VM with all nessesary resources (vnet, publicIP, nic, nsg) in first recource group
 ### 3. Deploy Two Storage Accounts
 - use provided Bicep file to deploy two storage accounts in second resource group
+- create new container in each storage account and upload some test files
 ### 4. RDP to VM and Install Azure Storage Explorer
 - use Remote Desktop Protocol (RDP) to connect to the deployed Windows Server VM using its public IP address
 - inside the VM, download and install [Azure Storage Explorer](https://azure.microsoft.com/en-us/products/storage/storage-explorer)
@@ -28,8 +29,8 @@ Azure infrastructure in this project has been provisioned using Bicep, a domain-
 ### 7. Accessing Data via Azure Storage Explorer
 - From the Windows Server VM:
   - launch Azure Storage Explorer from the Windows Server VM, authenticate using your Azure credentials
-  - access the storage accounts, and as the VM is within the specified VNet with a service endpoint, it can securely communicate with the storage accounts via Azure's backbone network
+  - access the storage accounts, and as the VM is within the specified VNet with a service endpoint, it can securely communicate with the storage accounts via Azure's backbone network and see the data files in the container
 - From a Local Laptop:
-  - access attempts from a local laptop to the storage accounts will be denied by default
+  - access attempts from a local laptop to the storage accounts container data will be denied by default
   - the secure access setup, which confines access only to the specified VNets, restricts direct access from external sources, such as a local laptop
-  - this configuration ensures that only resources within the designated VNet, specifically the deployed VM, can interact with the storage accounts via Azure's backbone network
+  - this configuration ensures that only resources within the designated VNet, specifically the deployed VM, can interact with the storage accounts container data via Azure's backbone network
