@@ -21,3 +21,6 @@
 06_Azure_IaC_Project_StaticWebsite/05_AzureApplicationGateway_WindowsVM_Deployment/.terraform*
 06_Azure_IaC_Project_StaticWebsite/05_AzureApplicationGateway_WindowsVM_Deployment/terraform.tfs*
 
+# Other Files
+10_Pipeline/
+

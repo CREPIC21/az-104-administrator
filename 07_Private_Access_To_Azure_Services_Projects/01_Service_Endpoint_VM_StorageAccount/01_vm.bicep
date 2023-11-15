@@ -21,14 +21,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   }
 }
 
-resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
-  name: 'testvm-ip'
-  location: location
-  properties: {
-    publicIPAllocationMethod: 'Dynamic'
-  }
-}
-
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   name: 'testvm-nic'
   location: location
@@ -40,9 +32,6 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
             id: resourceId('Microsoft.Network/virtualNetworks/subnets', networkName, 'default')
-          }
-          publicIPAddress: {
-            id: publicIPAddress.id
           }
         }
       }
