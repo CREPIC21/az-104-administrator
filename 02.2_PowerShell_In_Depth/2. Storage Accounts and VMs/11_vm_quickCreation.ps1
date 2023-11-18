@@ -1,0 +1,1 @@
+New-AzVM -Name "quickVM"

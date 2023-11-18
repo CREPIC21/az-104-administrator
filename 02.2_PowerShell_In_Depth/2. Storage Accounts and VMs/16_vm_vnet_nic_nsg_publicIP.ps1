@@ -1,5 +1,5 @@
 # Define the Azure Resource Group name
-$resourceGroup = "dan-grp"
+$resourceGroup = "powershell-grp"
 
 # Define the Azure Virtual Network name
 $networkName = "app-network"
@@ -107,4 +107,15 @@ Set-AzVMBootDiagnostic -Disable -VM $Vm
 
 # Create a new Azure Virtual Machine in the specified resource group and location
 New-AzVM -ResourceGroupName $resourceGroup -Location $Location -VM $Vm
-``
+
+# Attach new data disk to created VM
+$diskName = "app-disk"
+
+# Retrieve existing VM object
+$existingVM = Get-AzVM -ResourceGroupName $ResourceGroupName -Name $vmName
+
+# Adding new data disk
+$existingVM | Add-AzVMDataDisk -Name $diskName -DiskSizeInGB 16 -CreateOption Empty -Lun 0
+
+# Updating VM
+$existingVM | Update-AzVM

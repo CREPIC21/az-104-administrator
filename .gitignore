@@ -24,3 +24,6 @@
 # Other Files
 10_Pipeline/
 
+# Azure App Credentials File
+02.2_PowerShell_In_Depth/2. Storage Accounts and VMs/02_usingApplicationObject.ps1
+
