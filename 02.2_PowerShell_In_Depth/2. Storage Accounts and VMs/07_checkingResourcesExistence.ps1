@@ -1,3 +1,4 @@
+# Define variables for the resource group, location, storage account name, kind, SKU, container name
 $ResourceGroupName = "powershell-grp"
 $Location = "North Europe"
 $StorageAccountName = "powershe22536253"
