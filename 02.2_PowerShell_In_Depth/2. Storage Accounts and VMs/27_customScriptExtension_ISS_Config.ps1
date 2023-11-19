@@ -126,13 +126,13 @@ $Vm = Add-AzVMNetworkInterface -VM $vmConfig -Id $networkInterface.Id
 Set-AzVMBootDiagnostic -Disable -VM $Vm
 
 # Create a new Azure Virtual Machine in the specified resource group and location
-New-AzVM -ResourceGroupName $resourceGroup -Location $Location -VM $Vm
+New-AzVM -ResourceGroupName $resourceGroup -Location $location -VM $Vm
 
 # Attach new data disk to created VM
 $diskName = "app-disk"
 
 # Retrieve existing VM object
-$existingVM = Get-AzVM -ResourceGroupName $ResourceGroupName -Name $vmName
+$existingVM = Get-AzVM -ResourceGroupName $resourceGroup -Name $vmName
 
 # Adding new data disk
 $existingVM | Add-AzVMDataDisk -Name $diskName -DiskSizeInGB 16 -CreateOption Empty -Lun 0
@@ -141,12 +141,26 @@ $existingVM | Add-AzVMDataDisk -Name $diskName -DiskSizeInGB 16 -CreateOption Em
 $existingVM | Update-AzVM
 
 # Apply custom script extension
+# Extract the blob URL from the ICloudBlob object and store it in an array
 $blobURL = @($blob.ICloudBlob.Uri.AbsoluteUri)
+
+# Retrieve the storage account key using the specified resource group and account name, filtering for "key1"
 $storageAccountKey = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroup -AccountName $StorageAccountName) | Where-Object { $_.KeyName -eq "key1" }
+
+# Extract the storage account key value from the retrieved key object
 $storageAccountKeyValue = $storageAccountKey.Value
 
+# Define settings for the VM extension, including the file URIs
 $settings = @{"fileUris" = $blobURL }
-$protectedSettings = @{"storageAccountName" = $StorageAccountName; "storageAccountKey" = $storageAccountKeyValue; "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File 26_IIS_Config.ps1" }
 
+# Define protected settings for the VM extension, containing storage account details and the command to execute
+$protectedSettings = @{
+    "storageAccountName" = $StorageAccountName
+    "storageAccountKey"  = $storageAccountKeyValue
+    "commandToExecute"   = "powershell -ExecutionPolicy Unrestricted -File 26_IIS_Config.ps1"
+}
+
+# Set the Azure VM extension with specified configurations and settings
 Set-AzVMExtension -ResourceGroupName $resourceGroup -Location $location -VMName $vmName -Name "IISExtension" -Publisher "Microsoft.Compute" -ExtensionType "CustomScriptExtension" -TypeHandlerVersion "1.10" `
     -Settings $settings -ProtectedSettings $protectedSettings
+
