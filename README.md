@@ -16,7 +16,8 @@ As part of my preparation for the AZ-104 Azure Administrator certification, I've
 - [Azure_IaC_Project_Service_Endpoint_VM_StorageAccount Deployment](https://github.com/CREPIC21/az-administrator-architect/tree/main/07_Private_Access_To_Azure_Services_Projects/01_Service_Endpoint_VM_StorageAccount)
 
 
-### [PowerShell Scripts](https://github.com/CREPIC21/az-administrator-architect/tree/main/02.2_PowerShell_In_Depth)
+### PowerShell Scripts
+- [PowerShell Scripts](https://github.com/CREPIC21/az-administrator-architect/tree/main/02.2_PowerShell_In_Depth)
 - Description: Contains PowerShell scripts for various Azure resource provisioning and management tasks
 
 ### Bicep Files
