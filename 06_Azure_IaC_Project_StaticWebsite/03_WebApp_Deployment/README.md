@@ -1,4 +1,4 @@
-## ## Azure Infrastructure Automation with Terraform
+## Azure Infrastructure Automation with Terraform
 
 This project harnesses Terraform to streamline the provisioning of essential Azure resources, enabling the automated deployment of a web application on Azure Web App services.
 
