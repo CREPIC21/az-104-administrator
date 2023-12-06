@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#", // JSON schema definition for Azure deployment template
+    "contentVersion": "1.0.0.0", // Version of the content in the deployment template
+    "parameters": { // Parameters section containing configurable values
+        "location": { // Parameter for location/region
+            "type": "string", // Data type is a string
+            "defaultValue": "North Europe", // Default value for the parameter if not provided
+            "allowedValues": [ "North Europe", "UK South" ] // Allowed values for the location parameter
+        },
+        "storageAccountName": { // Parameter for storage account name
+            "type": "string", // Data type is a string
+            "defaultValue": "staticsitedanman0011223" // Default value for the parameter if not provided
+        },
+        "storageAccountType": { // Parameter for storage account type
+            "type": "string", // Data type is a string
+            "defaultValue": "Standard_LRS" // Default value for the parameter if not provided
+        },
+        "storageAccountKind": { // Parameter for storage account kind
+            "type": "string", // Data type is a string
+            "defaultValue": "StorageV2" // Default value for the parameter if not provided
+        }
+    },
+    "functions": [], // Placeholder for functions (not used in this template)
+    "variables": {}, // Placeholder for variables (not used in this template)
+    "resources": [ // Section defining Azure resources to be deployed
+        {
+            "type": "Microsoft.Storage/storageAccounts", // Type of resource: Storage Account
+            "apiVersion": "2022-05-01", // API version for the Storage Account
+            "name": "[concat(copyIndex(), parameters('storageAccountName'))]", // Name of the Storage Account (using copy index and parameter value)
+            "location": "[parameters('location')]", // Location/region for the Storage Account
+            "kind": "[parameters('storageAccountKind')]", // Kind of Storage Account
+            "sku": { // SKU details for the Storage Account
+                "name": "[parameters('storageAccountType')]" // SKU name for the Storage Account
+            },
+            "properties": { // Properties specific to the Storage Account
+                "supportsHttpsTrafficOnly": true, // Allows only HTTPS traffic
+                "defaultToOAuthAuthentication": false // Does not default to OAuth authentication
+            },
+            // Define a copy loop to create multiple instances of the storage account
+            "copy": {
+                "name": "storagecopy", // Name for the copy loop
+                "count": 1 // Number of instances to create (in this case, just one)
+            }
+        }
+    ],
+    "outputs": {} // Placeholder for outputs (not used in this template)
+}

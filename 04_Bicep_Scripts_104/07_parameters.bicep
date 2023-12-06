@@ -1,4 +1,4 @@
-// @description('Please specify a location') //currently there is a bug: ttps://github.com/MicrosoftDocs/azure-docs/issues/113981
+// @description('Please specify a location') //currently there is a bug: https://github.com/MicrosoftDocs/azure-docs/issues/113981
 // param location string
 
 var networkName = 'app-network'

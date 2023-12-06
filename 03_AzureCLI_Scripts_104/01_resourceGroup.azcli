@@ -1,2 +1,1 @@
 az group create --location "North Europe" --name "test-grp"
-            

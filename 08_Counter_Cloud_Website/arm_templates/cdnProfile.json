@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#", // JSON schema definition for Azure deployment template
+    "contentVersion": "1.0.0.0", // Version of the content in the deployment template
+    "parameters": { // Parameters section containing configurable values
+        "profileName": { // Parameter for CDN profile name
+            "type": "string", // Data type is a string
+            "defaultValue": "danmanprofile" // Default value for the parameter if not provided
+        },
+        "location": { // Parameter for location/region
+            "type": "string", // Data type is a string
+            "defaultValue": "North Europe" // Default value for the parameter if not provided
+        },
+        "sku": { // Parameter for SKU (stock keeping unit)
+            "type": "object", // Data type is an object
+            "defaultValue": { // Default value as an object containing the SKU name
+                "name": "Standard_Microsoft"
+            }
+        },
+        "storageAccountName": { // Parameter for storage account name
+            "type": "string", // Data type is a string
+            "defaultValue": "0staticsitedanman0011223" // Default value for the parameter if not provided
+        }
+    },
+    "resources": [ // Section defining Azure resources to be deployed
+        {
+            "apiVersion": "2023-05-01", // API version for the CDN profile
+            "name": "[parameters('profileName')]", // Name of the CDN profile using the specified parameter value
+            "location": "[parameters('location')]", // Location/region for the CDN profile
+            "sku": "[parameters('sku')]", // SKU for the CDN profile
+            "type": "microsoft.cdn/profiles" // Type of resource: CDN profiles
+        },
+        {
+            "apiVersion": "2023-05-01", // API version for the CDN endpoint
+            "dependsOn": [ // Dependency on the CDN profile
+                "[concat('Microsoft.Cdn/profiles/', parameters('profileName'))]"
+            ],
+            "name": "[concat(parameters('profileName'),'/',parameters('storageAccountName'))]", // Name of the CDN endpoint based on profile and storage account names
+            "location": "[parameters('location')]", // Location/region for the CDN endpoint
+            "type": "microsoft.cdn/profiles/endpoints", // Type of resource: CDN endpoints
+            "properties": { // Properties specific to the CDN endpoint
+                "originHostHeader": "[concat(parameters('storageAccountName'), '.z16.web.core.windows.net')]", // Host header for the origin of the content
+                "contentTypesToCompress": [ // Content types to compress for optimization
+                    "text/plain",
+                    "text/html",
+                    "text/css",
+                    "application/x-javascript",
+                    "text/javascript"
+                ],
+                "isHttpAllowed": false, // HTTP access not allowed
+                "isHttpsAllowed": true, // HTTPS access allowed
+                "queryStringCachingBehavior": "IgnoreQueryString", // Caching behavior for query strings
+                "origins": [ // Origins for the CDN endpoint
+                    {
+                        "name": "origin1", // Origin name
+                        "properties": {
+                            "hostName": "[concat(parameters('storageAccountName'), '.z16.web.core.windows.net')]" // Hostname of the origin
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
