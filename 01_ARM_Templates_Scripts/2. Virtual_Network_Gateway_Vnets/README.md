@@ -1,0 +1,1 @@
+- learning resources: https://learn.microsoft.com/en-us/training/modules/design-implement-hybrid-networking/3-exercise-create-configure-local-network-gateway

@@ -60,4 +60,5 @@ New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFil
 $cdnProfile = Get-AzCdnProfile -ResourceGroupName $ResourceGroupName
 $cdnEndpoint = Get-AzCdnEndpoint -ResourceGroupName $ResourceGroupName -ProfileName $cdnProfile.Name
 
+# Add a custom domain (cdnverify cname must be created prior to running this or else it'll error out)
 New-AzCdnCustomDomain -EndpointName $cdnEndpoint.Name -HostName $customDomainName -CustomDomainName $customDomainName -ProfileName $cdnProfile.Name -ResourceGroupName $ResourceGroupName
