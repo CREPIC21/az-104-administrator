@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "North Europe"
+        },
+        "storageAccountName": {
+            "value": "sgdanmansw012"
+        },
+        "storageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "storageAccountKind": {
+            "value": "StorageV2"
+        },
+        "profileName": {
+            "value": "swprofile012"
+        },
+        "sku": {
+            "value": {
+                "name": "Standard_Microsoft"
+            }
+        }
+    }
+}

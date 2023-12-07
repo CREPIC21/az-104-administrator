@@ -1,0 +1,90 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "North Europe",
+            "allowedValues": [ "North Europe", "UK South" ]
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "sgdanmansw01"
+        },
+        "storageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS"
+        },
+        "storageAccountKind": {
+            "type": "string",
+            "defaultValue": "StorageV2"
+        },
+        "profileName": {
+            "type": "string",
+            "defaultValue": "swprofile01"
+        },
+        "sku": {
+            "type": "object",
+            "defaultValue": {
+                "name": "Standard_Microsoft"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "kind": "[parameters('storageAccountKind')]",
+            "sku": {
+                "name": "[parameters('storageAccountType')]"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "defaultToOAuthAuthentication": false
+            }
+        },
+        {
+            "apiVersion": "2023-05-01",
+            "name": "[parameters('profileName')]",
+            "location": "[parameters('location')]",
+            "sku": "[parameters('sku')]",
+            "type": "microsoft.cdn/profiles"
+        },
+        {
+            "apiVersion": "2023-05-01",
+            "dependsOn": [
+                "[concat('Microsoft.cdn/profiles/', parameters('profileName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+            ],
+            "name": "[concat(parameters('profileName'),'/',parameters('storageAccountName'))]",
+            "location": "[parameters('location')]",
+            "type": "microsoft.cdn/profiles/endpoints",
+            "properties": {
+                "originHostHeader": "[concat(parameters('storageAccountName'), '.z16.web.core.windows.net')]",
+                "contentTypesToCompress": [
+                    "text/plain",
+                    "text/html",
+                    "text/css",
+                    "application/x-javascript",
+                    "text/javascript"
+                ],
+                "isHttpAllowed": true,
+                "isHttpsAllowed": true,
+                "queryStringCachingBehavior": "IgnoreQueryString",
+                "origins": [
+                    {
+                        "name": "origin1",
+                        "properties": {
+                            "hostName": "[concat(parameters('storageAccountName'), '.z16.web.core.windows.net')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}

@@ -7,18 +7,18 @@ infrastructure required to host a static website and improve its performance usi
 
 # Variables Setup
 $ResourceGroupName = "web-grp"
-$TemplateFileStorageAccount = ".\storageAccount.json"
-$TemplateFileCdnProfile = ".\cdnProfile.json"
-$StorageAccountName = "0staticsitedanman0011223"
+$TemplateFileStorageCdnProfile = ".\storagecdn.json"
+$TemplateFileStorageCdnProfileParameters = ".\storagecdn.parameters.json"
+$StorageAccountName = "sgdanmansw01"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
-$customDomainName = "projectdanijel.online"
+$customDomainName = "mycloudproject.online"
 
 # Azure Account Connection
 Connect-AzAccount
 
-# Deploy Storage Account
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageAccount
+# Deploy Storage Account and CDN Profile&Endpoint
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageCdnProfile -TemplateParameterFile $TemplateFileStorageCdnProfileParameters
 
 # Enable Static Website on Storage Account
 $storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName
@@ -53,12 +53,13 @@ foreach ($websiteFile in $websiteFilesArrayOfObjects) {
     Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $websiteFile.sourceFile -Blob $websiteFile.destinationFileName -Properties @{ ContentType = $websiteFile.contentType }
 }
 
-# Deploy CDN Profile
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileCdnProfile
+########################################################## CDN Custom Domain Configuration ########################################################################################################
 
-# Get CDN Profile and CDN Endpoint Objects and Ci=onfigure Custom Domain
+# Get CDN Profile and CDN Endpoint Objects and Configure Custom Domain
 $cdnProfile = Get-AzCdnProfile -ResourceGroupName $ResourceGroupName
 $cdnEndpoint = Get-AzCdnEndpoint -ResourceGroupName $ResourceGroupName -ProfileName $cdnProfile.Name
 
 # Add a custom domain (cdnverify cname must be created prior to running this or else it'll error out)
 New-AzCdnCustomDomain -EndpointName $cdnEndpoint.Name -HostName $customDomainName -CustomDomainName $customDomainName -ProfileName $cdnProfile.Name -ResourceGroupName $ResourceGroupName
+
+####################################################################################################################################################################################################
