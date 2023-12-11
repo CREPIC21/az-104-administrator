@@ -34,3 +34,5 @@
 02.2_PowerShell_In_Depth/4. Networking/5. Azure Application Gateway/02_usingApplicationObject.ps1
 02.2_PowerShell_In_Depth/4. Networking/6. Azure Firewall/02_usingApplicationObject.ps1
 
+# Node Modules
+08_Counter_Cloud_Website/templatesAnddeploymentScripts/node_modules

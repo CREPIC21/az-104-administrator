@@ -475,11 +475,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\crepi\\Desktop\\Terraform\\MyPortfolioProject\\MyPortfolioApp\\MyPortfolioApp\\MyPortfolioApp.csproj",
+      "projectUniqueName": "C:\\Users\\crepi\\Desktop\\AZ-104\\AZ_104_Administrator\\05_Azure_IaC_Project_ASP.NET_Website\\MyPortfolioApp\\MyPortfolioApp\\MyPortfolioApp.csproj",
       "projectName": "MyPortfolioApp",
-      "projectPath": "C:\\Users\\crepi\\Desktop\\Terraform\\MyPortfolioProject\\MyPortfolioApp\\MyPortfolioApp\\MyPortfolioApp.csproj",
+      "projectPath": "C:\\Users\\crepi\\Desktop\\AZ-104\\AZ_104_Administrator\\05_Azure_IaC_Project_ASP.NET_Website\\MyPortfolioApp\\MyPortfolioApp\\MyPortfolioApp.csproj",
       "packagesPath": "C:\\Users\\crepi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\crepi\\Desktop\\Terraform\\MyPortfolioProject\\MyPortfolioApp\\MyPortfolioApp\\obj\\",
+      "outputPath": "C:\\Users\\crepi\\Desktop\\AZ-104\\AZ_104_Administrator\\05_Azure_IaC_Project_ASP.NET_Website\\MyPortfolioApp\\MyPortfolioApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\crepi\\AppData\\Roaming\\NuGet\\NuGet.Config",

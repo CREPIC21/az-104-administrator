@@ -9,6 +9,8 @@ infrastructure required to host a static website and improve its performance usi
 $ResourceGroupName = "web-grp"
 $TemplateFileStorageCdnProfile = ".\storagecdn.json"
 $TemplateFileStorageCdnProfileParameters = ".\storagecdn.parameters.json"
+$TemplateCosmosDB = ".\cosmosdb.json"
+$TemplateCosmosDBParameters = ".\cosmosdb.parameters.json"
 $StorageAccountName = "sgdanmansw01"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
@@ -63,3 +65,14 @@ $cdnEndpoint = Get-AzCdnEndpoint -ResourceGroupName $ResourceGroupName -ProfileN
 New-AzCdnCustomDomain -EndpointName $cdnEndpoint.Name -HostName $customDomainName -CustomDomainName $customDomainName -ProfileName $cdnProfile.Name -ResourceGroupName $ResourceGroupName
 
 ####################################################################################################################################################################################################
+
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
+
+$cosmosDBKeys = Get-AzCosmosDBAccountKey -ResourceGroupName $ResourceGroupName -Name 'danmandb'
+$cosmosDBAccount = Get-AzCosmosDBAccount -ResourceGroupName $ResourceGroupName -Name 'danmandb'
+
+$connectionString = "DefaultEndpointsProtocol=https;AccountName=$($cosmosDBAccount.Name);AccountKey=$($cosmosDBKeys.PrimaryMasterKey);TableEndpoint=https://danmandb.table.cosmos.azure.com:443/;"
+
+# Execute the JavaScript script using Node.js and pass $c as an argument
+node createEntities.js $connectionString
+
