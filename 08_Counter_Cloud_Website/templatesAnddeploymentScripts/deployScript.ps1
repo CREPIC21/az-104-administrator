@@ -66,13 +66,20 @@ New-AzCdnCustomDomain -EndpointName $cdnEndpoint.Name -HostName $customDomainNam
 
 ####################################################################################################################################################################################################
 
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
+# Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable
+$db = New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
 
-$cosmosDBKeys = Get-AzCosmosDBAccountKey -ResourceGroupName $ResourceGroupName -Name 'danmandb'
-$cosmosDBAccount = Get-AzCosmosDBAccount -ResourceGroupName $ResourceGroupName -Name 'danmandb'
+# Retrieves the value of the 'dbName' parameter from the deployment result
+$dbName = $db.Parameters.dbName.Value
 
-$connectionString = "DefaultEndpointsProtocol=https;AccountName=$($cosmosDBAccount.Name);AccountKey=$($cosmosDBKeys.PrimaryMasterKey);TableEndpoint=https://danmandb.table.cosmos.azure.com:443/;"
+# Retrieves the primary keys of the Cosmos DB account using its name and resource group
+$cosmosDBKeys = Get-AzCosmosDBAccountKey -ResourceGroupName $ResourceGroupName -Name $dbName
+# Retrieves details about the Cosmos DB account using its name and resource group
+$cosmosDBAccount = Get-AzCosmosDBAccount -ResourceGroupName $ResourceGroupName -Name $dbName
 
-# Execute the JavaScript script using Node.js and pass $c as an argument
+# Constructs a connection string for the Cosmos DB account using its details
+$connectionString = "DefaultEndpointsProtocol=https;AccountName=$($cosmosDBAccount.Name);AccountKey=$($cosmosDBKeys.PrimaryMasterKey);TableEndpoint=https://$($cosmosDBAccount.Name).table.cosmos.azure.com:443/;"
+
+# Executes a JavaScript script named 'createEntities.js' using Node.js and passes the Cosmos DB connection string as an argument
 node createEntities.js $connectionString
 

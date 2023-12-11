@@ -51,19 +51,19 @@
                     "totalThroughputLimit": 4000
                 }
             }
-        },
-        {
-            "type": "Microsoft.DocumentDB/databaseAccounts/tables",
-            "apiVersion": "2023-09-15",
-            "name": "[concat(parameters('dbName'), '/', parameters('tableName'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('dbName'))]"
-            ],
-            "properties": {
-                "resource": {
-                    "id": "[parameters('tableName')]"
-                }
-            }
         }
+        // {
+        //     "type": "Microsoft.DocumentDB/databaseAccounts/tables",
+        //     "apiVersion": "2023-09-15",
+        //     "name": "[concat(parameters('dbName'), '/', parameters('tableName'))]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('dbName'))]"
+        //     ],
+        //     "properties": {
+        //         "resource": {
+        //             "id": "[parameters('tableName')]"
+        //         }
+        //     }
+        // }
     ]
 }
