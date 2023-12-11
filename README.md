@@ -15,6 +15,11 @@ As part of my preparation for the AZ-104 Azure Administrator certification, I've
 - [Azure_IaC_Project_StaticWebsite Application Gateway Windows VMs Deployment](https://github.com/CREPIC21/az-administrator-architect/tree/main/06_Azure_IaC_Project_StaticWebsite/05_AzureApplicationGateway_WindowsVM_Deployment)
 - [Azure_IaC_Project_Service_Endpoint_VM_StorageAccount Deployment](https://github.com/CREPIC21/az-administrator-architect/tree/main/07_Private_Access_To_Azure_Services_Projects/01_Service_Endpoint_VM_StorageAccount)
 
+### Linux Azure Projects
+- [Linux Server Docker App Configuration](https://github.com/CREPIC21/linux-server-docker-app-configuration/tree/main)
+- [Linux Server Configuration - Setting Up a Wordpress Site](https://github.com/CREPIC21/linux-server-wordpress-configuration/tree/main)
+- [Linux Virtual mail Server Configuration](https://github.com/CREPIC21/linux-virtual-mail-server-configuration/tree/main)
+
 
 ### PowerShell Scripts
 - [PowerShell Scripts](https://github.com/CREPIC21/az-administrator-architect/tree/main/02.2_PowerShell_In_Depth)
