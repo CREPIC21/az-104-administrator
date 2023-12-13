@@ -10,6 +10,7 @@ param profileName string
 param sku object = {
   name: 'Standard_Microsoft'
 }
+param dnszone_name string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
@@ -59,4 +60,24 @@ resource profileName_storageAccount 'microsoft.cdn/profiles/endpoints@2023-05-01
 
     storageAccount
   ]
+}
+
+resource dnszone_name_resource 'Microsoft.Network/dnszones@2018-05-01' = {
+  name: dnszone_name
+  location: 'global'
+  properties: {
+    zoneType: 'Public'
+  }
+}
+
+resource dnszone_name_resume 'Microsoft.Network/dnszones/CNAME@2018-05-01' = {
+  parent: dnszone_name_resource
+  name: 'resume'
+  properties: {
+    TTL: 60
+    CNAMERecord: {
+      cname: '${storageAccountName}.azureedge.net'
+    }
+    targetResource: {}
+  }
 }

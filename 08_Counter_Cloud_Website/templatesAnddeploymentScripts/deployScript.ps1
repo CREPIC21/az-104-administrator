@@ -7,20 +7,19 @@ infrastructure required to host a static website and improve its performance usi
 
 # Variables Setup
 $ResourceGroupName = "web-grp"
-$TemplateFileStorageCdnProfile = ".\storagecdn.json"
-$TemplateFileStorageCdnProfileParameters = ".\storagecdn.parameters.json"
+$TemplateFileStorageCdnProfileDnsZone = ".\storagecdndnszone.json"
+$TemplateFileStorageCdnProfileParametersDnsZone = ".\storagecdndnszone.parameters.json"
 $TemplateCosmosDB = ".\cosmosdb.json"
 $TemplateCosmosDBParameters = ".\cosmosdb.parameters.json"
 $StorageAccountName = "sgdanmansw012"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
-$customDomainName = "mycloudproject.online"
 
 # Azure Account Connection
 Connect-AzAccount
 
 # Deploy Storage Account and CDN Profile&Endpoint
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageCdnProfile -TemplateParameterFile $TemplateFileStorageCdnProfileParameters
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageCdnProfileDnsZone -TemplateParameterFile $TemplateFileStorageCdnProfileParametersDnsZone
 
 # Enable Static Website on Storage Account
 $storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName

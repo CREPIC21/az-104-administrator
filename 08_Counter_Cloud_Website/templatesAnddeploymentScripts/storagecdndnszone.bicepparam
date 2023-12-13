@@ -1,4 +1,4 @@
-using 'storagecdn.bicep'
+using 'storagecdndnszone.bicep'
 
 param location = 'North Europe'
 param storageAccountName = 'sgdanmansw012'
@@ -8,3 +8,4 @@ param profileName = 'swprofile012'
 param sku = { value: {
     name: 'Standard_Microsoft'
   } }
+param dnszone_name = 'mycloudproject.online'
