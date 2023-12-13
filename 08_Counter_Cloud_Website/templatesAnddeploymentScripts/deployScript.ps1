@@ -55,12 +55,6 @@ foreach ($websiteFile in $websiteFilesArrayOfObjects) {
     Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $websiteFile.sourceFile -Blob $websiteFile.destinationFileName -Properties @{ ContentType = $websiteFile.contentType }
 }
 
-
-$TemplateDNSZone = '.\dns.json'
-$TemplateDNSZoneParameters = '.\dns.parameters.json'
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateDNSZone -TemplateParameterFile $TemplateDNSZoneParameters
-
-
 # Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable
 $db = New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
 

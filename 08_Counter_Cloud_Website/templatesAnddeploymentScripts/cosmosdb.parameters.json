@@ -4,9 +4,6 @@
     "parameters": {
         "dbName": {
             "value": "danmandb"
-        },
-        "tableName": {
-            "value": "VisitorCount"
         }
     }
 }
