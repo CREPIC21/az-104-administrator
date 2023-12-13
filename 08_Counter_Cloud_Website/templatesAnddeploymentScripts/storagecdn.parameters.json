@@ -21,6 +21,9 @@
             "value": {
                 "name": "Standard_Microsoft"
             }
+        },
+        "dnszone_name": {
+            "value": "mycloudproject.online"
         }
     }
 }

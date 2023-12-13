@@ -28,29 +28,3 @@ async function main() {
 }
 
 main();
-
-// // Entity to add
-// const entity = {
-//     partitionKey: "Counts",
-//     rowKey: "VisitorCount",
-//     /* Add other properties as needed */
-//     count: 0 // Sample property: count with value 0
-// };
-
-// // Create table
-// serviceClient.createTable(tableName)
-//     .then(() => {
-//         console.log("Table created successfully");
-//     })
-//     .catch((error) => {
-//         console.error("Error creating table:", error);
-//     });
-
-// // Add the entity to the table
-// serviceClient.createEntity(entity)
-//     .then(() => {
-//         console.log("Entity added successfully");
-//     })
-//     .catch((error) => {
-//         console.error("Error adding entity:", error);
-//     });

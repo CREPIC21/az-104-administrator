@@ -11,7 +11,7 @@ $TemplateFileStorageCdnProfile = ".\storagecdn.json"
 $TemplateFileStorageCdnProfileParameters = ".\storagecdn.parameters.json"
 $TemplateCosmosDB = ".\cosmosdb.json"
 $TemplateCosmosDBParameters = ".\cosmosdb.parameters.json"
-$StorageAccountName = "sgdanmansw01"
+$StorageAccountName = "sgdanmansw012"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
 $customDomainName = "mycloudproject.online"
@@ -55,16 +55,11 @@ foreach ($websiteFile in $websiteFilesArrayOfObjects) {
     Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $websiteFile.sourceFile -Blob $websiteFile.destinationFileName -Properties @{ ContentType = $websiteFile.contentType }
 }
 
-########################################################## CDN Custom Domain Configuration ########################################################################################################
 
-# Get CDN Profile and CDN Endpoint Objects and Configure Custom Domain
-$cdnProfile = Get-AzCdnProfile -ResourceGroupName $ResourceGroupName
-$cdnEndpoint = Get-AzCdnEndpoint -ResourceGroupName $ResourceGroupName -ProfileName $cdnProfile.Name
+$TemplateDNSZone = '.\dns.json'
+$TemplateDNSZoneParameters = '.\dns.parameters.json'
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateDNSZone -TemplateParameterFile $TemplateDNSZoneParameters
 
-# Add a custom domain (cdnverify cname must be created prior to running this or else it'll error out)
-New-AzCdnCustomDomain -EndpointName $cdnEndpoint.Name -HostName $customDomainName -CustomDomainName $customDomainName -ProfileName $cdnProfile.Name -ResourceGroupName $ResourceGroupName
-
-####################################################################################################################################################################################################
 
 # Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable
 $db = New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters

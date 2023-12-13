@@ -9,7 +9,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "sgdanmansw01"
+            "defaultValue": "sgdanmansw012"
         },
         "storageAccountType": {
             "type": "string",
@@ -28,6 +28,10 @@
             "defaultValue": {
                 "name": "Standard_Microsoft"
             }
+        },
+        "dnszone_name": {
+            "defaultValue": "mycloudproject.online",
+            "type": "String"
         }
     },
     "functions": [],
@@ -83,6 +87,30 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2018-05-01",
+            "name": "[parameters('dnszone_name')]",
+            "location": "global",
+            "properties": {
+                "zoneType": "Public"
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "apiVersion": "2018-05-01",
+            "name": "[concat(parameters('dnszone_name'), '/resume')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszone_name'))]"
+            ],
+            "properties": {
+                "TTL": 60,
+                "CNAMERecord": {
+                    "cname": "[concat(parameters('storageAccountName'), '.azureedge.net')]"
+                },
+                "targetResource": {}
             }
         }
     ],
