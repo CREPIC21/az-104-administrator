@@ -52,6 +52,31 @@
             }
         },
         {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2018-05-01",
+            "name": "[parameters('dnszone_name')]",
+            "location": "global",
+            "properties": {
+                "zoneType": "Public"
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "apiVersion": "2018-05-01",
+            "name": "[concat(parameters('dnszone_name'), '/resume')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszone_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ],
+            "properties": {
+                "TTL": 60,
+                "CNAMERecord": {
+                    "cname": "[concat(parameters('storageAccountName'), '.azureedge.net')]"
+                },
+                "targetResource": {}
+            }
+        },
+        {
             "apiVersion": "2023-05-01",
             "name": "[parameters('profileName')]",
             "location": "[parameters('location')]",
@@ -90,27 +115,14 @@
             }
         },
         {
-            "type": "Microsoft.Network/dnszones",
-            "apiVersion": "2018-05-01",
-            "name": "[parameters('dnszone_name')]",
-            "location": "global",
-            "properties": {
-                "zoneType": "Public"
-            }
-        },
-        {
-            "type": "Microsoft.Network/dnszones/CNAME",
-            "apiVersion": "2018-05-01",
-            "name": "[concat(parameters('dnszone_name'), '/resume')]",
+            "type": "Microsoft.Cdn/profiles/endpoints/customDomains",
+            "apiVersion": "2022-11-01-preview",
+            "name": "[concat(parameters('profileName'),'/',parameters('storageAccountName'),'/','resume-mycloudproject-online')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/dnszones', parameters('dnszone_name'))]"
+                "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('profileName'), parameters('storageAccountName'))]"
             ],
             "properties": {
-                "TTL": 60,
-                "CNAMERecord": {
-                    "cname": "[concat(parameters('storageAccountName'), '.azureedge.net')]"
-                },
-                "targetResource": {}
+                "hostName": "resume.mycloudproject.online"
             }
         }
     ],

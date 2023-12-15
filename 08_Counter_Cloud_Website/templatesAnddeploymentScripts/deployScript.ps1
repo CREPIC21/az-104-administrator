@@ -6,18 +6,18 @@ infrastructure required to host a static website and improve its performance usi
 #>
 
 # Variables Setup
+$subscriptionName = "Azure Subscription 1"
 $ResourceGroupName = "web-grp"
 $TemplateFileStorageCdnProfileDnsZone = ".\storagecdndnszone.json"
 $TemplateFileStorageCdnProfileParametersDnsZone = ".\storagecdndnszone.parameters.json"
 $TemplateCosmosDB = ".\cosmosdb.json"
 $TemplateCosmosDBParameters = ".\cosmosdb.parameters.json"
 $StorageAccountName = "sgdanmansw012"
+$ProfileName = "swprofile012"
+$EndpointName = "sgdanmansw012";
+$CustomDomainName = "resume-mycloudproject-online"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
-
-$funcApp = ".\functionapp.json"
-
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $funcApp
 
 # Azure Account Connection
 Connect-AzAccount
@@ -75,3 +75,8 @@ $connectionString = "DefaultEndpointsProtocol=https;AccountName=$($cosmosDBAccou
 # Executes a JavaScript script named 'createEntities.js' using Node.js and passes the Cosmos DB connection string as an argument
 node createEntities.js $connectionString
 
+$subscription = Get-AzSubscription | Where-Object { $_.Name -eq $subscriptionName }
+$subscriptionID = $subscription.Id
+
+# Executes a JavaScript script named 'enablecustomHTTPS.js' using Node.js
+node enablecustomHTTPS.js $subscriptionID $ResourceGroupName $ProfileName $EndpointName $CustomDomainName

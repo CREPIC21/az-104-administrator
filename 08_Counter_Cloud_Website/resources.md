@@ -1,0 +1,2 @@
+- https://learn.microsoft.com/en-us/azure/cdn/cdn-custom-ssl?tabs=option-1-default-enable-https-with-a-cdn-managed-certificate
+- https://learn.microsoft.com/en-us/rest/api/cdn/custom-domains/enable-custom-https?view=rest-cdn-2023-05-01&tabs=JavaScript#customdomains_enablecustomhttpsusingcdnmanagedcertificate
