@@ -1,0 +1,113 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "North Europe",
+            "metadata": {
+                "description": "Specifies region of all resources."
+            }
+        }
+    },
+    "variables": {
+        "functionAppName": "CosmosDBDanManFunc",
+        "appServicePlanName": "FunctionPlan",
+        "functionNameComputed": "MyHttpTriggeredFunction",
+        "functionRuntime": "node"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2020-12-01",
+            "name": "[variables('appServicePlanName')]",
+            "location": "[parameters('location')]",
+            "kind": "functionapp",
+            "sku": {
+                "name": "Y1"
+            },
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2020-12-01",
+            "name": "[variables('functionAppName')]",
+            "location": "[parameters('location')]",
+            "kind": "functionapp",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "[variables('functionRuntime')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        }
+                    ]
+                },
+                "httpsOnly": true
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+            ]
+        },
+        // {
+        //     "type": "Microsoft.Web/sites/extensions",
+        //     "apiVersion": "2021-02-01",
+        //     "name": "[concat(variables('functionAppName'), '/kudu')]",
+        //     "location": "[parameters('location')]",
+        //     "properties": {
+        //         "command": "npm install @azure/data-tables",
+        //         "type": "exec"
+        //     },
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+        //     ]
+        // },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2020-12-01",
+            "name": "[format('{0}/{1}', variables('functionAppName'), variables('functionNameComputed'))]",
+            "properties": {
+                "config": {
+                    "disabled": false,
+                    "bindings": [
+                        {
+                            "name": "req",
+                            "type": "httpTrigger",
+                            "direction": "in",
+                            "authLevel": "function",
+                            "methods": [
+                                "get"
+                            ]
+                        },
+                        {
+                            "name": "$return",
+                            "type": "http",
+                            "direction": "out"
+                        }
+                    ]
+                },
+                "files": {
+                    "run.csx": ""
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+            ]
+        }
+    ],
+    "outputs": {
+        "functionAppHostName": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2020-12-01').defaultHostName]"
+        },
+        "functionName": {
+            "type": "string",
+            "value": "[variables('functionNameComputed')]"
+        }
+    }
+}

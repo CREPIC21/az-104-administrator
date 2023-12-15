@@ -15,6 +15,10 @@ $StorageAccountName = "sgdanmansw012"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
 
+$funcApp = ".\functionapp.json"
+
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $funcApp
+
 # Azure Account Connection
 Connect-AzAccount
 

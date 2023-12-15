@@ -1,0 +1,113 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "functionappname": {
+            "type": "string",
+            "defaultValue": "danmanfunc"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "North Europe"
+        },
+        "hostingPlanName": {
+            "type": "string",
+            "defaultValue": "danmanhostingplan"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "sgdanmansw012"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('functionappname')]",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "location": "[parameters('location')]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "node"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "~18"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('b454ea40-6d37-4942-926a-a63094de3c14','web-grp','Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('b454ea40-6d37-4942-926a-a63094de3c14','web-grp','Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        }
+                    ],
+                    "cors": {
+                        "allowedOrigins": [
+                            "https://portal.azure.com"
+                        ]
+                    }
+                },
+                "publicNetworkAccess": "Enabled",
+                "httpsOnly": true
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2020-12-01",
+            "name": "[concat(parameters('functionappname'), '/hellofunc')]",
+            "properties": {
+                "config": {
+                    "disabled": false,
+                    "bindings": [
+                        {
+                            "name": "req",
+                            "type": "httpTrigger",
+                            "direction": "in",
+                            "authLevel": "function",
+                            "methods": [
+                                "get"
+                            ]
+                        },
+                        {
+                            "name": "$return",
+                            "type": "http",
+                            "direction": "out"
+                        }
+                    ]
+                },
+                "files": {
+                    "index.js": { "uri": "https://sgdanmansw012.blob.core.windows.net/$web/function_app.js" }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+            ]
+        },
+        {
+            "apiVersion": "2020-12-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "functionapp",
+            "properties": {},
+            "dependsOn": [],
+            "sku": {
+                "name": "Y1"
+            }
+        }
+    ]
+}
