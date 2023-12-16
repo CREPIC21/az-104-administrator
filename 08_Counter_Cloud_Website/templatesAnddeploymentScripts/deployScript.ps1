@@ -19,8 +19,12 @@ $CustomDomainName = "resume-mycloudproject-online"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
 
+$funcDeploy = ".\functionapp.json"
+
 # Azure Account Connection
 Connect-AzAccount
+
+New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $funcDeploy
 
 # Deploy Storage Account and CDN Profile&Endpoint
 New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageCdnProfileDnsZone -TemplateParameterFile $TemplateFileStorageCdnProfileParametersDnsZone
