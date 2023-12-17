@@ -29,6 +29,30 @@ New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFil
 $storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName
 Enable-AzStorageStaticWebsite -IndexDocument $IndexDocument -ErrorDocument404Path $ErrorDocument -Context $storageAccount.Context
 
+# Upload Website Files to Storage Account
+$websiteFilesArrayOfObjects = @(
+    @{
+        sourceFile          = "../frontend/index.html";
+        destinationFileName = "index.html";
+        contentType         = "text/html"
+    },
+    @{
+        sourceFile          = "../frontend/style.css";
+        destinationFileName = "style.css";
+        contentType         = "text/css"
+    },
+    @{
+        sourceFile          = "../frontend/script.js";
+        destinationFileName = "script.js";
+        contentType         = "text/javascript"
+    }
+)
+$containerName = '$web'
+
+foreach ($websiteFile in $websiteFilesArrayOfObjects) {
+    Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $websiteFile.sourceFile -Blob $websiteFile.destinationFileName -Properties @{ ContentType = $websiteFile.contentType }
+}
+
 # Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable
 $db = New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
 
