@@ -6,7 +6,7 @@
             "value": "North Europe"
         },
         "storageAccountName": {
-            "value": "sgdanmansw012"
+            "value": "resumestoragedc"
         },
         "storageAccountType": {
             "value": "Standard_LRS"
@@ -15,7 +15,7 @@
             "value": "StorageV2"
         },
         "profileName": {
-            "value": "swprofile012"
+            "value": "resumeprofile"
         },
         "sku": {
             "value": {
@@ -24,6 +24,12 @@
         },
         "dnszone_name": {
             "value": "mycloudproject.online"
+        },
+        "hostingPlanName": {
+            "value": "resumehostingplan"
+        },
+        "functionappname": {
+            "value": "countresumefunc"
         }
     }
 }

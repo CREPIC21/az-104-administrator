@@ -12,19 +12,15 @@ $TemplateFileStorageCdnProfileDnsZone = ".\storagecdndnszone.json"
 $TemplateFileStorageCdnProfileParametersDnsZone = ".\storagecdndnszone.parameters.json"
 $TemplateCosmosDB = ".\cosmosdb.json"
 $TemplateCosmosDBParameters = ".\cosmosdb.parameters.json"
-$StorageAccountName = "sgdanmansw012"
-$ProfileName = "swprofile012"
-$EndpointName = "sgdanmansw012";
+$StorageAccountName = "resumestoragedc"
+$ProfileName = "resumeprofile"
+$EndpointName = "resumestoragedc";
 $CustomDomainName = "resume-mycloudproject-online"
 $IndexDocument = "index.html"
 $ErrorDocument = "error.html"
 
-$funcDeploy = ".\functionapp.json"
-
 # Azure Account Connection
 Connect-AzAccount
-
-New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $funcDeploy
 
 # Deploy Storage Account and CDN Profile&Endpoint
 New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageCdnProfileDnsZone -TemplateParameterFile $TemplateFileStorageCdnProfileParametersDnsZone
@@ -32,35 +28,6 @@ New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFil
 # Enable Static Website on Storage Account
 $storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName
 Enable-AzStorageStaticWebsite -IndexDocument $IndexDocument -ErrorDocument404Path $ErrorDocument -Context $storageAccount.Context
-
-# Get Storage Account Web URL
-$weburl = (Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName | Select-Object PrimaryEndpoints).PrimaryEndpoints.Web
-$weburl = $weburl.replace("https://", "")
-$weburl = $weburl.replace("/", "")
-
-# Upload Website Files to Storage Account
-$websiteFilesArrayOfObjects = @(
-    @{
-        sourceFile          = "../frontend/index.html";
-        destinationFileName = "index.html";
-        contentType         = "text/html"
-    },
-    @{
-        sourceFile          = "../frontend/style.css";
-        destinationFileName = "style.css";
-        contentType         = "text/css"
-    },
-    @{
-        sourceFile          = "../frontend/script.js";
-        destinationFileName = "script.js";
-        contentType         = "text/javascript"
-    }
-)
-$containerName = '$web'
-
-foreach ($websiteFile in $websiteFilesArrayOfObjects) {
-    Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $websiteFile.sourceFile -Blob $websiteFile.destinationFileName -Properties @{ ContentType = $websiteFile.contentType }
-}
 
 # Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable
 $db = New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
