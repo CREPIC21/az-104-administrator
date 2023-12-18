@@ -29,28 +29,31 @@ New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFil
 $storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName
 Enable-AzStorageStaticWebsite -IndexDocument $IndexDocument -ErrorDocument404Path $ErrorDocument -Context $storageAccount.Context
 
-# Upload Website Files to Storage Account
-$websiteFilesArrayOfObjects = @(
-    @{
-        sourceFile          = "../frontend/index.html";
-        destinationFileName = "index.html";
-        contentType         = "text/html"
-    },
-    @{
-        sourceFile          = "../frontend/style.css";
-        destinationFileName = "style.css";
-        contentType         = "text/css"
-    },
-    @{
-        sourceFile          = "../frontend/script.js";
-        destinationFileName = "script.js";
-        contentType         = "text/javascript"
-    }
-)
+# Set your folder path and container name
+$folderPath = "../frontend"
 $containerName = '$web'
 
-foreach ($websiteFile in $websiteFilesArrayOfObjects) {
-    Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $websiteFile.sourceFile -Blob $websiteFile.destinationFileName -Properties @{ ContentType = $websiteFile.contentType }
+# Get all files from the folder
+$files = Get-ChildItem -Path $folderPath -File
+
+foreach ($file in $files) {
+    # Set destination file path (keeping the same folder structure)
+    $destinationFileName = Split-Path -Path $file.FullName -Leaf
+    $destinationFileName
+
+    # Determine content type based on file extension
+    $contentType = @{
+        ".html" = "text/html"
+        ".css"  = "text/css"
+        ".js"   = "text/javascript"
+        ".jpg"  = "image/jpg"
+        ".png"  = "image/png"
+        # Add more file extensions and content types if needed
+    }[$file.Extension]
+    'Content type' + $contentType
+
+    # Upload files to Azure Blob Storage
+    Set-AzStorageBlobContent -Context $storageAccount.Context -Container $containerName -File $file.FullName -Blob $destinationFileName -Properties @{ ContentType = $contentType } -Force
 }
 
 # Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable
