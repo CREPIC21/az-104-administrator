@@ -5,7 +5,10 @@
         "location": {
             "type": "string",
             "defaultValue": "North Europe",
-            "allowedValues": [ "North Europe", "UK South" ]
+            "allowedValues": [
+                "North Europe",
+                "UK South"
+            ]
         },
         "storageAccountName": {
             "type": "string",
@@ -40,6 +43,10 @@
         "functionappname": {
             "type": "string",
             "defaultValue": "danfuncapp"
+        },
+        "dbConnectionString": {
+            "defaultValue": "none",
+            "type": "string"
         }
     },
     "functions": [],
@@ -129,7 +136,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('profileName'), parameters('storageAccountName'))]",
                 "[resourceId('Microsoft.Network/dnszones/CNAME', parameters('dnszone_name'), 'resume')]"
-
             ],
             "properties": {
                 "hostName": "resume.mycloudproject.online"
@@ -150,6 +156,10 @@
                             "value": "~4"
                         },
                         {
+                            "name": "DBCONNECTIONSTRING",
+                            "value": "[parameters('dbConnectionString')]"
+                        },
+                        {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
                             "value": "node"
                         },
@@ -160,17 +170,18 @@
                         {
                             "name": "AzureWebJobsStorage",
                             "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', parameters('storageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-09-01').keys[0].value)]"
-
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
                             "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}', parameters('storageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-09-01').keys[0].value)]"
-
                         }
                     ],
                     "cors": {
                         "allowedOrigins": [
-                            "https://portal.azure.com"
+                            "https://portal.azure.com",
+                            "[concat('https://',parameters('storageAccountName'),'.z16.web.core.windows.net')]",
+                            "[concat('https://',parameters('storageAccountName'),'.azureedge.net')]",
+                            "[concat('https://','resume.',parameters('dnszone_name'))]"
                         ]
                     }
                 },

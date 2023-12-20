@@ -35,6 +35,6 @@
 02.2_PowerShell_In_Depth/4. Networking/6. Azure Firewall/02_usingApplicationObject.ps1
 
 # Node Modules
-08_Counter_Cloud_Website/templatesAnddeploymentScripts/node_modules
+08_Counter_Cloud_Website/backend/node_modules/
 08_Counter_Cloud_Website/test
 08_Counter_Cloud_Website/diagram_excalidrawFile.excalidraw

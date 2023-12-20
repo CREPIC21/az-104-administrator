@@ -30,6 +30,14 @@
         },
         "functionappname": {
             "value": "countresumefunc"
+        },
+        "dbConnectionString": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b454ea40-6d37-4942-926a-a63094de3c14/resourceGroups/web-grp/providers/Microsoft.KeyVault/vaults/resumedbkeyvault"
+                },
+                "secretName": "DBCONNECTIONSTRING"
+            }
         }
     }
 }
