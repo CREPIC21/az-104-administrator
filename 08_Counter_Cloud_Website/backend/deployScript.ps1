@@ -5,7 +5,7 @@ CDN endpoint to make the site accessible through a custom domain name, ensuring 
 infrastructure required to host a static website and improve its performance using Azure services like Storage and CDN using ARM templates and PowerShell.
 #>
 
-# Variables Setup
+# Variables setup for different resource names and file paths
 $subscriptionName = "Azure Subscription 1"
 $ResourceGroupName = "web-grp"
 $TemplateFileStorageCdnProfileDnsZone = ".\arm_templates\storage_dns_cdn_funcApp\storagecdndnszone.json"
@@ -24,7 +24,7 @@ $ErrorDocument = "error.html"
 # Azure Account Connection
 Connect-AzAccount
 
-# Assigns the result of deploying a new Azure Resource Group Deployment to the $db variable - deploy cosmos db and key vault
+# Deploying Cosmos DB and Key Vault and retrieving necessary information
 $db = New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateCosmosDB -TemplateParameterFile $TemplateCosmosDBParameters
 
 # Retrieves the value of the 'dbName' parameter from the deployment result
@@ -38,14 +38,13 @@ $cosmosDBAccount = Get-AzCosmosDBAccount -ResourceGroupName $ResourceGroupName -
 # Constructs a connection string for the Cosmos DB account using its details
 $connectionString = "DefaultEndpointsProtocol=https;AccountName=$($cosmosDBAccount.Name);AccountKey=$($cosmosDBKeys.PrimaryMasterKey);TableEndpoint=https://$($cosmosDBAccount.Name).table.cosmos.azure.com:443/;"
 
-# Executes a JavaScript script named 'createEntities.js' using Node.js and passes the Cosmos DB connection string as an argument
+# Executes a JavaScript script named 'createEntities.js' using Node.js and passes the Cosmos DB connection string as an argument -> script creates table and entities
 node $CreateEntitiesScript $connectionString
 
-$vaultName = "resumedbkeyvault"
+# Setting up variables for Azure Key Vault secret and role assignment
+$vaultName = $db.Parameters.vaults_resumevaultdabman_name.Value
 $secretName = "DBCONNECTIONSTRING"
 $roleName = "Key Vault Secrets Officer"
-
-# Replace <Your_Username> with your actual username in Azure AD
 $username = 'Danijel Črepić'
 
 # Retrieve the user object
@@ -57,16 +56,17 @@ $objectId = $user.Id
 # Display the Object ID
 Write-Output "The Object ID for user '$username' is: $objectId"
 
+# Retrieving subscription ID
 $subscription = Get-AzSubscription | Where-Object { $_.Name -eq $subscriptionName }
 $subscriptionID = $subscription.Id
 
-# Assign role to the user
+# Assigning a role to the user within the specified Azure subscription
 New-AzRoleAssignment -ObjectId $objectId -RoleDefinitionName $roleName -Scope "/subscriptions/$subscriptionID/resourceGroups/$ResourceGroupName/providers/Microsoft.KeyVault/vaults/$vaultName"
 
-# Set the secret in Key Vault - add yourself in Azure Key Vault Secrets Officer Role to be able to run this command
+# Set the secret in Key Vault -> function app will use the secret for connection to CosmosDB
 Set-AzKeyVaultSecret -VaultName $vaultName -Name $secretName -SecretValue (ConvertTo-SecureString -String $connectionString -AsPlainText -Force)
 
-# deploy storage account, public dns, cdn profile, cdn profile endpoint, function app, hosting plan
+# Deploy storage account, public dns, cdn profile, cdn profile endpoint, function app, hosting plan
 New-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFileStorageCdnProfileDnsZone -TemplateParameterFile $TemplateFileStorageCdnProfileParametersDnsZone
 
 # Enable Static Website on Storage Account
