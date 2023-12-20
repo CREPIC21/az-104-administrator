@@ -59,7 +59,7 @@ resource profile 'microsoft.cdn/profiles@2023-05-01' = {
 
 resource profileName_storageAccount 'microsoft.cdn/profiles/endpoints@2023-05-01' = {
   parent: profile
-  name: 'storageAccountName'
+  name: storageAccountName
   location: location
   properties: {
     originHostHeader: '${storageAccountName}.z16.web.core.windows.net'
@@ -83,7 +83,6 @@ resource profileName_storageAccount 'microsoft.cdn/profiles/endpoints@2023-05-01
     ]
   }
   dependsOn: [
-
     storageAccount
   ]
 }
