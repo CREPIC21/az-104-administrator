@@ -6,6 +6,9 @@ As part of my preparation for the AZ-104 Azure Administrator certification, I've
 
 ## Contents
 
+### Azure Projects built using ARM Templates and Bicep
+- [Counter_Cloud_Website](https://github.com/CREPIC21/az-administrator-architect/tree/main/08_Counter_Cloud_Website)
+
 ### Azure Projects built using Terraform and Bicep
 - [Azure_IaC_Project_ASP.NET_Website](https://github.com/CREPIC21/az-administrator-architect/tree/main/05_Azure_IaC_Project_ASP.NET_Website)
 - [Azure_IaC_Project_StaticWebsite Linux VM Deployment](https://github.com/CREPIC21/az-administrator-architect/tree/main/06_Azure_IaC_Project_StaticWebsite/01_LinuxVM_Deployment)
