@@ -9,7 +9,7 @@ As part of my preparation for the AZ-104 Azure Administrator certification, I've
 ### Azure Projects built using ARM Templates and Bicep
 - [Counter_Cloud_Website](https://github.com/CREPIC21/az-administrator-architect/tree/main/08_Counter_Cloud_Website)
 - [Azure Windows VM Signup Project](https://github.com/CREPIC21/az-104-signup-azurevm-page)
-- [Download PingPong Game .exe file Project](https://github.com/CREPIC21/az-104-download-pingponggame-page)
+- [Download PingPong Game .exe File Project](https://github.com/CREPIC21/az-104-download-pingponggame-page)
 
 ### Azure Projects built using Terraform and Bicep
 - [Azure_IaC_Project_ASP.NET_Website](https://github.com/CREPIC21/az-administrator-architect/tree/main/05_Azure_IaC_Project_ASP.NET_Website)
